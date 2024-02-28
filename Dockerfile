@@ -1,5 +1,5 @@
 # Use a Node.js base image
-FROM node:14
+FROM node:19.8.1
 
 # Install Puppeteer dependencies
 RUN apt-get update && apt-get install -y \
@@ -55,4 +55,4 @@ COPY . .
 EXPOSE 3000
 
 # Serve the app
-CMD ["npm", "start"]
+CMD ["npm", "start:prod"]
