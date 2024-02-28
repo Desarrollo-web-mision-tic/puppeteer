@@ -1,11 +1,25 @@
-FROM ghcr.io/puppeteer/puppeteer:22.3.0
+# Usar una imagen de Node.js que incluya todas las dependencias necesarias para ejecutar Puppeteer
+FROM node:14-slim
 
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+# Instalar Puppeteer
+RUN npm install puppeteer
 
-WORKDIR /usr/src/app
+# Agregar el usuario 'puppeteer' para ejecutar el proceso de Node.js
+RUN groupadd -r puppeteer && useradd -r -g puppeteer -G audio,video puppeteer \
+    && mkdir -p /home/puppeteer/Downloads \
+    && chown -R puppeteer:puppeteer /home/puppeteer
 
+# Ejecutar todo como 'puppeteer' a partir de ahora
+USER puppeteer
+
+# Copiar el archivo 'package.json' y 'package-lock.json' (si está disponible)
 COPY package*.json ./
-RUN npm ci
+
+# Instalar todas las dependencias del proyecto
+RUN npm install
+
+# Copiar el resto de los archivos del proyecto
 COPY . .
-CMD [ "node", "server.js" ]
+
+# Iniciar la aplicación
+CMD [ "npm", "start" ]
