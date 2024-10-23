@@ -4,6 +4,9 @@ const consultaRoutes = require('./src/routes/consultaRoutes');
 const app = express();
 app.use(express.json());
 
+const cors = require('cors');
+app.use(cors());
+
 app.use('/api/query', consultaRoutes);
 
 const port = process.env.PORT || 3000;
