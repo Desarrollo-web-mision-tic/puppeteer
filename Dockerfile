@@ -55,4 +55,4 @@ COPY . .
 EXPOSE 3000
 
 # Serve the app
-CMD ["npm", "start:prod"]
+CMD ["npm", "run", "start:prod"]
